@@ -1,0 +1,65 @@
+name:               Squawkr
+version:            0.0.0
+cabal-version:      >= 1.8
+build-type:         Simple
+
+Flag dev
+    Description:   Turn on development settings, like auto-reload templates.
+    Default:       False
+
+Flag library-only
+    Description:   Build for use with "yesod devel"
+    Default:       False
+
+library
+    hs-source-dirs: ., app
+    exposed-modules:    Application
+                        Foundation
+                        Import
+                        Import.NoFoundation
+                        Settings
+                        Handler.Home
+                        Handler.Register
+                        Handler.SignIn
+    extensions: NoImplicitPrelude
+                TemplateHaskell
+                RecordWildCards
+                MultiParamTypeClasses
+                OverloadedStrings
+
+    build-depends:  base
+                  , yesod-core
+                  , yesod
+                  , persistent
+                  , persistent-postgresql
+                  , monad-logger
+                  , fast-logger
+                  , shakespeare
+                  , aeson
+                  , template-haskell
+                  , classy-prelude-yesod
+                  , yaml
+                  , file-embed
+
+    if flag(dev) || flag(library-only)
+        cpp-options:   -DDEVELOPMENT
+        ghc-options:   -Wall -fwarn-tabs -O0
+    else
+        ghc-options:   -Wall -fwarn-tabs -O2
+
+
+executable         Squawkr
+    if flag(library-only)
+        Buildable: False
+
+    main-is:           main.hs
+    hs-source-dirs:    app
+    build-depends:     base, Squawkr
+
+    ghc-options:       -threaded -rtsopts -with-rtsopts=-N
+
+    extensions: TemplateHaskell
+                OverloadedStrings
+                NoImplicitPrelude
+                MultiParamTypeClasses
+                RecordWildCards

@@ -1,0 +1,7 @@
+<h1>Squawkr
+
+<form method=post action=@{SignInR} enctype=#{loginEncType}>
+  ^{loginFormWidget}
+
+<form method=post action=@{RegisterR} enctype=#{registerEncType}>
+  ^{registerFormWidget}
